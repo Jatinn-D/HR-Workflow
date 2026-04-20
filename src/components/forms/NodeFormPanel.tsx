@@ -126,7 +126,7 @@ export const NodeFormPanel = () => {
               </select>
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-gray-800 text-sm tracking-wide font-normal">Auto-approve Threshold (₹)</label>
+              <label className="text-gray-800 text-sm tracking-wide font-normal">Auto-approve Threshold</label>
               <input type="number" {...register('threshold')} onChange={(e) => store.updateNodeData(selectedNode.id, { threshold: Number(e.target.value) })} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" placeholder="e.g. 500" />
             </div>
           </>
