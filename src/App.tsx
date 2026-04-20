@@ -24,7 +24,7 @@ function App() {
             <button 
               key={tab}
               onClick={() => setActiveTab(tab.toLowerCase())}
-              className={`px-3 py-1 text-sm transition-colors rounded font-normal tracking-wide ${activeTab === tab.toLowerCase() ? 'bg-primary-600 text-white shadow-sm border border-gray-300' : 'text-gray-600 hover:bg-gray-50'}`}
+              className={`px-3 py-1 text-md transition-colors rounded font-normal tracking-wide ${activeTab === tab.toLowerCase() ? 'bg-primary-600 text-white shadow-sm border border-gray-300' : 'text-gray-600 hover:bg-gray-50'}`}
             >
               {tab}
             </button>

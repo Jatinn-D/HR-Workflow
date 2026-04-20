@@ -42,7 +42,7 @@ export const ActionsToolbar = () => {
 
   return (
     <>
-      <Panel position="top-center" className="bg-white px-4 py-1.5 rounded-xl shadow-md border border-gray-200 flex gap-2 items-center text-sm font-normal z-10 m-4 overflow-x-auto justify-center">
+      <Panel position="top-center" className="bg-white px-4 py-1.5 rounded-xl shadow-md border border-gray-200 flex gap-2 items-center text-md font-normal z-10 m-4 overflow-x-auto justify-center">
         <button 
           onClick={store.undo} 
           disabled={past.length === 0} 

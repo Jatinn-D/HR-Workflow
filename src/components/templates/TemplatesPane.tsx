@@ -46,11 +46,11 @@ export const TemplatesPane = () => {
 
   return (
     <div className="p-10 max-w-6xl mx-auto font-normal">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-3">
          <h2 className="text-2xl text-gray-900 tracking-wide">Workflow Templates</h2>
       </div>
       
-      <p className="text-gray-600 mb-10 max-w-2xl text-sm leading-relaxed tracking-wide whitespace-nowrap">
+      <p className="text-gray-600 mb-8 max-w-2xl text-md leading-relaxed tracking-wide whitespace-nowrap">
         Kickstart your logic by importing complex preset mappings automatically reviewed and optimized by HR system architects.
       </p>
 

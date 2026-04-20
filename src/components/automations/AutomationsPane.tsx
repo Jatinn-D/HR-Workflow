@@ -23,12 +23,12 @@ export const AutomationsPane = () => {
 
   return (
     <div className="p-10 max-w-6xl mx-auto font-normal">
-      <h2 className="text-2xl text-gray-900 mb-8 tracking-wide">Saved Automations</h2>
-      <p className="text-gray-600 mb-8 text-sm">Deploy, manage, or eradicate your persistent workflows here.</p>
+      <h2 className="text-2xl text-gray-900 mb-3 tracking-wide">Saved Automations</h2>
+      <p className="text-gray-600 mb-8 text-md">Deploy, manage, or eradicate your persistent workflows here.</p>
 
       <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
         <table className="w-full text-left text-sm text-gray-600">
-          <thead className="bg-gray-50 border-b border-gray-200 uppercase tracking-wider text-xs text-gray-500">
+          <thead className="bg-gray-50 border-b border-gray-200 tracking-wider text-sm text-gray-500">
             <tr>
               <th className="px-6 py-4 font-normal">Name</th>
               <th className="px-6 py-4 font-normal">Nodes</th>
