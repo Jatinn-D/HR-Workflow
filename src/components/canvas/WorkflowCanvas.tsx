@@ -5,7 +5,7 @@ import {
   Controls,
   ReactFlowProvider,
   useReactFlow,
-  MiniMap
+  MiniMap,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -37,6 +37,14 @@ const WorkflowArea = () => {
 
   const hasFocusedNode = !!focusedNodeId;
   const isEmptyState = nodes.length === 0;
+
+  const isValidConnection = useCallback((connection) => {
+    const targetNode = nodes.find((n) => n.id === connection.target);
+    const sourceNode = nodes.find((n) => n.id === connection.source);
+    if (targetNode?.type === 'startNode') return false; 
+    if (sourceNode?.type === 'endNode') return false;
+    return true;
+  }, [nodes]);
 
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
@@ -128,6 +136,7 @@ const WorkflowArea = () => {
             onNodesChange={store.onNodesChange}
             onEdgesChange={store.onEdgesChange}
             onConnect={store.onConnect}
+            isValidConnection={isValidConnection}
             onNodeDoubleClick={onNodeDoubleClick}
             onPaneClick={onPaneClick}
             nodeTypes={nodeTypes}

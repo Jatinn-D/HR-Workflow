@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useWorkflowStore } from '../../store/workflowStore';
 import { simulateWorkflow } from '../../api/mockApi';
 
@@ -25,6 +25,11 @@ export const SandboxPanel = ({ onClose }: { onClose: () => void }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    runSimulation();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex flex-col h-full w-full font-normal">

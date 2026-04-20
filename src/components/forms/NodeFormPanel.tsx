@@ -1,6 +1,50 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useWorkflowStore } from '../../store/workflowStore';
+
+const KeyValueEditor = ({ nodeId, fieldName, initialValue }: { nodeId: string, fieldName: string, initialValue: string | any }) => {
+  const store = useWorkflowStore();
+  
+  const [pairs, setPairs] = useState<{k: string, v: string, id: number}[]>(() => {
+     try {
+       const obj = typeof initialValue === 'string' ? JSON.parse(initialValue || '{}') : (initialValue || {});
+       const parsed = Object.entries(obj).map(([k,v]) => ({ k, v: String(v), id: Math.random() }));
+       return parsed.length > 0 ? parsed : [{k: '', v: '', id: Math.random()}];
+     } catch {
+       return [{k: '', v: '', id: Math.random()}];
+     }
+  });
+
+  const sync = (newPairs: {k: string, v: string, id: number}[]) => {
+     setPairs(newPairs);
+     const obj = newPairs.reduce((acc, curr) => {
+        if (curr.k.trim()) acc[curr.k.trim()] = curr.v.trim();
+        return acc;
+     }, {} as any);
+     store.updateNodeData(nodeId, { [fieldName]: JSON.stringify(obj) });
+  };
+
+  const updatePair = (index: number, key: 'k'|'v', val: string) => {
+     const n = [...pairs];
+     n[index][key] = val;
+     sync(n);
+  };
+
+  return (
+    <div className="flex flex-col gap-2">
+      {pairs.map((p, i) => (
+         <div key={p.id} className="flex gap-2 items-center">
+           <input className="flex-1 w-1/2 px-2 py-1.5 bg-white border border-gray-300 rounded text-xs text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow placeholder:text-gray-400" placeholder="Key" value={p.k} onChange={e => updatePair(i, 'k', e.target.value)} />
+           <input className="flex-1 w-1/2 px-2 py-1.5 bg-white border border-gray-300 rounded text-xs text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow placeholder:text-gray-400" placeholder="Value" value={p.v} onChange={e => updatePair(i, 'v', e.target.value)} />
+           <button onClick={(e) => { e.preventDefault(); sync(pairs.filter((_, idx) => idx !== i)); }} className="text-gray-400 hover:text-red-500 transition-colors p-1 leading-none text-lg shrink-0">&times;</button>
+         </div>
+      ))}
+      <button onClick={(e) => { e.preventDefault(); sync([...pairs, {k: '', v: '', id: Math.random()}]); }} className="text-xs text-primary-600 hover:text-primary-800 self-start transition-colors font-normal flex items-center gap-1 mt-1">
+         <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg> Add Property
+      </button>
+    </div>
+  );
+};
 
 export const NodeFormPanel = () => {
   const store = useWorkflowStore();
@@ -44,28 +88,28 @@ export const NodeFormPanel = () => {
 
         {selectedNode.type === 'startNode' && (
           <div className="flex flex-col gap-1.5 pt-2">
-             <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Metadata (Optional)</label>
-             <textarea {...register('metadata')} onChange={(e) => store.updateNodeData(selectedNode.id, { metadata: e.target.value })} rows={2} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" placeholder='{"team": "engineering"}' />
+             <label className="text-gray-800 text-sm tracking-wide font-normal">Metadata</label>
+             <KeyValueEditor key={selectedNode.id} nodeId={selectedNode.id} fieldName="metadata" initialValue={selectedNode.data.metadata} />
           </div>
         )}
 
         {selectedNode.type === 'taskNode' && (
           <>
             <div className="flex flex-col gap-1.5">
-              <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Description</label>
+              <label className="text-gray-800 text-sm tracking-wide font-normal">Description</label>
               <textarea {...register('description')} onChange={(e) => store.updateNodeData(selectedNode.id, { description: e.target.value })} rows={3} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Assignee</label>
+              <label className="text-gray-800 text-sm tracking-wide font-normal">Assignee</label>
               <input {...register('assignee')} onChange={(e) => store.updateNodeData(selectedNode.id, { assignee: e.target.value })} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" placeholder="e.g. IT Department" />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Due Date</label>
+              <label className="text-gray-800 text-sm tracking-wide font-normal">Due Date</label>
               <input type="date" {...register('dueDate')} onChange={(e) => store.updateNodeData(selectedNode.id, { dueDate: e.target.value })} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" />
             </div>
             <div className="flex flex-col gap-1.5 pt-2">
-              <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Custom Fields (JSON)</label>
-              <textarea {...register('customFields')} onChange={(e) => store.updateNodeData(selectedNode.id, { customFields: e.target.value })} rows={2} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm font-mono text-xs focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" placeholder='{"priority": "high", "department": "IT"}' />
+              <label className="text-gray-800 text-sm tracking-wide font-normal">Custom Fields</label>
+              <KeyValueEditor key={selectedNode.id} nodeId={selectedNode.id} fieldName="customFields" initialValue={selectedNode.data.customFields} />
             </div>
           </>
         )}
@@ -73,7 +117,7 @@ export const NodeFormPanel = () => {
         {selectedNode.type === 'approvalNode' && (
           <>
             <div className="flex flex-col gap-1.5">
-              <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Approver Role</label>
+              <label className="text-gray-800 text-sm tracking-wide font-normal">Approver Role</label>
               <select {...register('role')} onChange={(e) => store.updateNodeData(selectedNode.id, { role: e.target.value })} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow">
                 <option value="">Select Role</option>
                 <option value="Manager">Manager</option>
@@ -82,7 +126,7 @@ export const NodeFormPanel = () => {
               </select>
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Auto-approve Threshold ($)</label>
+              <label className="text-gray-800 text-sm tracking-wide font-normal">Auto-approve Threshold (₹)</label>
               <input type="number" {...register('threshold')} onChange={(e) => store.updateNodeData(selectedNode.id, { threshold: Number(e.target.value) })} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" placeholder="e.g. 500" />
             </div>
           </>
@@ -91,7 +135,7 @@ export const NodeFormPanel = () => {
         {selectedNode.type === 'automatedNode' && (
           <>
              <div className="flex flex-col gap-1.5">
-              <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Automated Action</label>
+              <label className="text-gray-800 text-sm tracking-wide font-normal">Automated Action</label>
               <select {...register('actionId')} onChange={(e) => store.updateNodeData(selectedNode.id, { actionId: e.target.value })} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow">
                 <option value="">Select Action</option>
                 <option value="send_email">Send Email</option>
@@ -99,9 +143,9 @@ export const NodeFormPanel = () => {
                 <option value="update_hris">Update HRIS</option>
               </select>
             </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Action Parameters (JSON)</label>
-              <textarea {...register('actionParams')} onChange={(e) => store.updateNodeData(selectedNode.id, { actionParams: e.target.value })} rows={2} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm font-mono text-xs focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" placeholder='{"recipient": "it@company.com"}' />
+            <div className="flex flex-col gap-1.5 pt-2">
+              <label className="text-gray-800 text-sm tracking-wide font-normal">Action Parameters</label>
+              <KeyValueEditor key={selectedNode.id} nodeId={selectedNode.id} fieldName="actionParams" initialValue={selectedNode.data.actionParams} />
             </div>
           </>
         )}
@@ -109,7 +153,7 @@ export const NodeFormPanel = () => {
         {selectedNode.type === 'endNode' && (
           <>
             <div className="flex flex-col gap-1.5">
-              <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">End Message</label>
+              <label className="text-gray-800 text-sm tracking-wide font-normal">End Message</label>
               <input {...register('endMessage')} onChange={(e) => store.updateNodeData(selectedNode.id, { endMessage: e.target.value })} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" placeholder="Workflow Completed." />
             </div>
             <div className="flex items-center gap-2 mt-2">
