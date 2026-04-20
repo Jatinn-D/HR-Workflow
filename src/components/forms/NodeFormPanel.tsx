@@ -44,7 +44,8 @@ export const NodeFormPanel = () => {
 
         {selectedNode.type === 'startNode' && (
           <div className="flex flex-col gap-1.5 pt-2">
-             <div className="bg-blue-50 p-3 rounded text-blue-800 text-xs shadow-sm font-normal">Setup workflow metadata directly in code.</div>
+             <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Metadata (Optional)</label>
+             <textarea {...register('metadata')} onChange={(e) => store.updateNodeData(selectedNode.id, { metadata: e.target.value })} rows={2} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" placeholder='{"team": "engineering"}' />
           </div>
         )}
 
@@ -62,6 +63,10 @@ export const NodeFormPanel = () => {
               <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Due Date</label>
               <input type="date" {...register('dueDate')} onChange={(e) => store.updateNodeData(selectedNode.id, { dueDate: e.target.value })} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" />
             </div>
+            <div className="flex flex-col gap-1.5 pt-2">
+              <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Custom Fields (JSON)</label>
+              <textarea {...register('customFields')} onChange={(e) => store.updateNodeData(selectedNode.id, { customFields: e.target.value })} rows={2} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm font-mono text-xs focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" placeholder='{"priority": "high", "department": "IT"}' />
+            </div>
           </>
         )}
 
@@ -76,6 +81,10 @@ export const NodeFormPanel = () => {
                 <option value="HRBP">HRBP</option>
               </select>
             </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Auto-approve Threshold ($)</label>
+              <input type="number" {...register('threshold')} onChange={(e) => store.updateNodeData(selectedNode.id, { threshold: Number(e.target.value) })} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" placeholder="e.g. 500" />
+            </div>
           </>
         )}
 
@@ -89,6 +98,23 @@ export const NodeFormPanel = () => {
                 <option value="generate_doc">Generate Document</option>
                 <option value="update_hris">Update HRIS</option>
               </select>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">Action Parameters (JSON)</label>
+              <textarea {...register('actionParams')} onChange={(e) => store.updateNodeData(selectedNode.id, { actionParams: e.target.value })} rows={2} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm font-mono text-xs focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" placeholder='{"recipient": "it@company.com"}' />
+            </div>
+          </>
+        )}
+
+        {selectedNode.type === 'endNode' && (
+          <>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-gray-700 uppercase text-xs tracking-wider font-normal">End Message</label>
+              <input {...register('endMessage')} onChange={(e) => store.updateNodeData(selectedNode.id, { endMessage: e.target.value })} className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none transition-shadow" placeholder="Workflow Completed." />
+            </div>
+            <div className="flex items-center gap-2 mt-2">
+              <input type="checkbox" id="summaryFlag" {...register('summaryFlag')} onChange={(e) => store.updateNodeData(selectedNode.id, { summaryFlag: e.target.checked })} className="w-4 h-4 text-primary-600 bg-white border-gray-300 rounded focus:ring-primary-500 outline-none" />
+              <label htmlFor="summaryFlag" className="text-sm text-gray-800 tracking-wide select-none cursor-pointer">Generate Completion Summary</label>
             </div>
           </>
         )}

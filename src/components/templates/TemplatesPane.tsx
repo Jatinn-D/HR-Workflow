@@ -6,21 +6,21 @@ const TEMPLATES = [
     name: 'Employee Onboarding',
     description: 'A standard comprehensive onboarding sequence covering IT setup, HR briefing, and Managerial sync.',
     color: 'bg-blue-50 border-blue-200 text-blue-700',
-    nodes: 8
+    nodes: 3
   },
   {
     id: 'hw_req',
     name: 'Hardware Request',
     description: 'Approval pipeline for fetching new laptops mapping directly to IT allocation DB routing.',
     color: 'bg-emerald-50 border-emerald-200 text-emerald-700',
-    nodes: 5
+    nodes: 3
   },
   {
     id: 'offboarding',
     name: 'Silent Offboarding',
     description: 'Data lockdown, automated asset recovery emails, and exit interview routing procedures.',
     color: 'bg-purple-50 border-purple-200 text-purple-700',
-    nodes: 12
+    nodes: 3
   }
 ];
 
@@ -48,10 +48,9 @@ export const TemplatesPane = () => {
     <div className="p-10 max-w-6xl mx-auto font-normal">
       <div className="flex justify-between items-center mb-8">
          <h2 className="text-2xl text-gray-900 tracking-wide">Workflow Templates</h2>
-         <button className="text-sm px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-700 transition-colors">Request Template</button>
       </div>
       
-      <p className="text-gray-600 mb-10 max-w-2xl text-sm leading-relaxed tracking-wide">
+      <p className="text-gray-600 mb-10 max-w-2xl text-sm leading-relaxed tracking-wide whitespace-nowrap">
         Kickstart your logic by importing complex preset mappings automatically reviewed and optimized by HR system architects.
       </p>
 
@@ -66,7 +65,7 @@ export const TemplatesPane = () => {
               <p className="text-gray-500 text-sm leading-relaxed mb-6 flex-1">{t.description}</p>
               <div className="flex items-center justify-between mt-auto">
                 <span className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full">{t.nodes} Nodes</span>
-                <button onClick={() => handleApplyTemplate(t.name)} className="text-sm text-primary-600 hover:text-primary-800 transition-colors">
+                <button onClick={() => handleApplyTemplate(t.name)} className="text-sm text-primary-600 cursor-pointer hover:text-primary-800 hover:transform-translate-x-2 transition-colors">
                   Import Recipe &rarr;
                 </button>
               </div>

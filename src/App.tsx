@@ -15,7 +15,7 @@ function App() {
       <header className="bg-white border-b border-gray-200 flex items-center z-20 shadow-sm shrink-0 h-16 px-6 relative justify-between">
         <div className="z-10">
           <h1 className="text-2xl tracking-wider text-gray-900 font-bold cursor-pointer" onClick={() => setActiveTab('workflows')}>
-            Workflow <span className="text-primary-600 font-italic">Designer</span>
+            Workflow<span className="text-primary-600 font-italic">Designer</span>
           </h1>
         </div>
         

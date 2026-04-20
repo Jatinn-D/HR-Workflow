@@ -50,7 +50,7 @@ export const AutomationsPane = () => {
                 <tr key={wf.id} className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 font-normal text-gray-900">{wf.name}</td>
                   <td className="px-6 py-4"><span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs box-border">{wf.nodes.length} Blocks</span></td>
-                  <td className="px-6 py-4 tracking-wide text-xs">{new Date(wf.updatedAt).toLocaleDateString()} {new Date(wf.updatedAt).toLocaleTimeString()}</td>
+                  <td className="px-6 py-4 tracking-wide text-xs">{new Date(wf.updatedAt).toLocaleDateString()} | {new Date(wf.updatedAt).toLocaleTimeString()}</td>
                   <td className="px-6 py-4 flex justify-end gap-3 text-xs">
                     <button onClick={() => handleRun(wf.id)} className="px-4 py-1.5 bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors">Run</button>
                     <button onClick={() => handleEdit(wf.id)} className="px-4 py-1.5 border border-gray-300 bg-white text-gray-700 rounded hover:bg-gray-100 transition-colors shadow-sm">Edit</button>
