@@ -88,7 +88,7 @@ export const NodeFormPanel = () => {
 
         {selectedNode.type === 'startNode' && (
           <div className="flex flex-col gap-1.5 pt-2">
-             <label className="text-gray-800 text-sm tracking-wide font-normal">Metadata</label>
+             <label className="text-gray-800 text-sm tracking-wide font-normal">Initial Config</label>
              <KeyValueEditor key={selectedNode.id} nodeId={selectedNode.id} fieldName="metadata" initialValue={selectedNode.data.metadata} />
           </div>
         )}
@@ -162,6 +162,12 @@ export const NodeFormPanel = () => {
             </div>
           </>
         )}
+
+        {/* Global Metadata for all nodes */}
+        <div className="border-t border-gray-100 pt-6 mt-2 flex flex-col gap-3">
+          <label className="text-gray-800 text-sm tracking-wide font-normal">Node Metadata</label>
+          <KeyValueEditor key={`${selectedNode.id}-meta`} nodeId={selectedNode.id} fieldName="universalMetadata" initialValue={selectedNode.data.universalMetadata} />
+        </div>
       </form>
     </div>
   );
